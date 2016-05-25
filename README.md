@@ -9,4 +9,3 @@ Works on VS Code Python IDE
 ### Todo
 - [ ] Understand logic of operations
 - [ ] Understand D3 visualization
-- [ ] Extend computation model to simplical complexes
