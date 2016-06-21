@@ -43,6 +43,10 @@ function turnForceOn(graph){
         //linkDistance( function(d) { return ((d.source.size + d.target.size + 3)/(40*2)); } )
         .size([width, height]);
 
+    //remove old SVG content to replace in same place
+    d3.select("svg").remove();
+    
+
     //Append a SVG to the body of the html page. Assign this SVG as an object to svg
     var svg = d3.select("body").append("svg")
         .attr("width", width)
