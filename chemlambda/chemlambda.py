@@ -23,6 +23,7 @@
 
 
 
+import sys, getopt
 # import validator
 import molparser as mp
 import data
@@ -185,7 +186,7 @@ def generate_cycle(start=0, step=1, max_c=50, jsonAt=50, out_file='',
 
 
 
-def main():
+def main(argv):
     # The current version of chemlambda-py doesn't work like the original
     # chemlambda, it can produce a per-cycle output right now, but there's no
     # rewrites as in the original version.
@@ -193,8 +194,10 @@ def main():
     # mol files from mol_files/
     # mol_file = 'mol_files/2.mol'
     # mol_file = 'mol_files/betaMove.mol'
-    mol_file = 'mol_files/9_quine.mol'
+    #mol_file = 'mol_files/9_quine.mol'
     # mol_file = 'mol_files/ackackpred.mol'
+
+    mol_file = argv
     html_out_file = mol_file.replace('.mol', '.html')
 
     # set create_d3 parameter to True to create d3 visualisation of the intial
@@ -211,4 +214,4 @@ def main():
     return 0
 
 if __name__ == '__main__':
-    main()
+    main(sys.argv[1])
