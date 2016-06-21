@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+.node {
+  stroke: #fff;
+  stroke-width: 1.5px;
+}
+
+.link {
+  stroke: #999;
+  stroke-opacity: .6;
+}
+
+</style>
+<!--script type="application/json" id="mis"-->
+
+
+<script type="application/json" id="mis0"> 
+{
+    "nodes": [
+        {
+            "color": "#f0a900", 
+            "size": 3, 
+            "atom": "T_0_0"
+        }, 
+        {
+            "color": "#222222", 
+            "size": 12, 
+            "atom": "T_0"
+        }, 
+        {
+            "color": "#91009a", 
+            "size": 1.5, 
+            "atom": "FRIN_1_0"
+        }, 
+        {
+            "color": "#f0a900", 
+            "size": 6, 
+            "atom": "FRIN_1"
+        }
+    ], 
+    "links": [
+        {
+            "source": 1, 
+            "target": 0
+        }, 
+        {
+            "source": 2, 
+            "target": 0
+        }, 
+        {
+            "source": 3, 
+            "target": 2
+        }
+    ]
+}
+</script> 
+<script type="application/json" id="mis1"> 
+{
+    "nodes": [], 
+    "links": []
+}
+</script> 
+
+
+
+</script>
+<body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
+
+
+<button onclick="turnForceOn(graph0)">Move 0</button>
+<button onclick="turnForceOn(graph1)">Move 1</button>
+
+<script>
+
+//wrap d3 svg in function
+function turnForceOn(graph){
+    //Constants for the SVG
+    var width = 500,
+        height = 500;
+
+    //Set up the force layout
+    var force = d3.layout.force()
+        .friction(.9)
+        .charge(-20)
+        .linkDistance(10)
+        .gravity(.09)
+        .linkStrength(1)
+        //linkDistance( function(d) { return ((d.source.size + d.target.size + 3)/(40*2)); } )
+        .size([width, height]);
+
+    //Append a SVG to the body of the html page. Assign this SVG as an object to svg
+    var svg = d3.select("body").append("svg")
+        .attr("width", width)
+        .attr("height", height);
+
+
+
+    //Creates the graph data structure out of the json data
+    force.nodes(graph.nodes)
+        .links(graph.links)
+        .start();
+
+    //Create all the line svgs but without locations yet
+    var link = svg.selectAll(".link")
+        .data(graph.links)
+        .enter().append("line")
+        .attr("class", "link")
+        .style("stroke-width", '2px');
+
+    //Do the same with the circles for the nodes - no 
+    var node = svg.selectAll(".node")
+        .data(graph.nodes)
+        .enter().append("circle")
+        .attr("class", "node")
+        .attr("r", function (d) { return d.size; })
+        .style("fill", function (d) { return d.color; })
+        .call(force.drag);
+
+
+    //Now we are giving the SVGs co-ordinates - the force layout is generating the co-ordinates which this code is using to update the attributes of the SVG elements
+    force.on("tick", function () {
+        link.attr("x1", function (d) {
+            return d.source.x;
+        })
+            .attr("y1", function (d) {
+            return d.source.y;
+        })
+            .attr("x2", function (d) {
+            return d.target.x;
+        })
+            .attr("y2", function (d) {
+            return d.target.y;
+        });
+
+        node.attr("cx", function (d) {
+            return d.x;
+        })
+            .attr("cy", function (d) {
+            return d.y;
+        });
+    });
+
+}
+
+
+var mis0 = document.getElementById('mis0').innerHTML; 
+graph0 = JSON.parse(mis0); 
+var mis1 = document.getElementById('mis1').innerHTML; 
+graph1 = JSON.parse(mis1); 
+
+
+</script>
+<!--
+<div>This file is adapted from:
+	<a href="http://www.coppelia.io/2014/07/an-a-to-z-of-extra-features-for-the-d3-force-layout/">
+		http://www.coppelia.io/2014/07/an-a-to-z-of-extra-features-for-the-d3-force-layout/
+	</a>
+-->

@@ -23,11 +23,11 @@ verbose = True  # set verbosity
 
 # The following takes effect only if verbose is True
 # Print Atoms and Ports as tables; Useless in huge molecules
-show_tables = False
+show_tables = True #False
 show_atom_count = True
 
 # Every moves per cycle
-show_moves = False
+show_moves = True
 show_move_count = True
 
 # show attempts at moves and failures
@@ -46,17 +46,21 @@ arrow_col = "#f3f3f3"
 white_col = "#ffffff"
 
 # atom sizes
-port_size = 1
-mid_port_size = 2
+port_size = 0.5 #1
+mid_port_size = 1 #2
 main_atom_size = 4
 atom_scale_factor = 3
+free_atom_size = 2 #[YA] to differentiate FRIN / FROUT (discovered) atoms
 
 # template files
 # TODO portable file paths
-html_temp = 'templates/file.html'
-js_temp = 'templates/file.js'
+html_temp = 'templates/file_1.html'
+#js_temp = 'templates/file_1.js'
+graph_temp = 'templates/graph.html'
+force_temp = 'templates/force.js'
+button_temp = 'templates/button.html'
 
-
+# [YA] changed FRIN/FROUT sizes
 atom_color_size_dict = {
         "mi": [in_col,  mid_port_size],
         "li": [in_col,  port_size],
@@ -73,8 +77,8 @@ atom_color_size_dict = {
         "FOE": [in_col,  main_atom_size],
         "Arrow": [arrow_col,  main_atom_size],
         "T": [term_col,  main_atom_size],
-        "FROUT": [out_col,  main_atom_size],
-        "FRIN": [in_col,  main_atom_size]
+        "FROUT": [out_col,  free_atom_size], 
+        "FRIN": [in_col,  free_atom_size]
         }
 
 

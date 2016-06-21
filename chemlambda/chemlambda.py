@@ -38,6 +38,7 @@ tf = textformat.TextOutput()
 
 counter = data.ChemCounter()
 dicts = data.ChemlambdaDicts()
+viz = data.GenerateMoves()
 
 
 def validate_mol_file(mol_file, ignore_errors=True):
@@ -81,9 +82,9 @@ def intialise(mol_file, create_d3=False, html_out_file='out.html'):
                               file_name=out_file)
 
     if create_d3:
+        viz.start(html_out_file) 
         dicts._take_snapshot(counter.cycle_count)
-        data._d3_output(dicts.mega_atoms_list[counter.cycle_count],
-                        html_out_file)
+        viz.add(dicts.mega_atoms_list[counter.cycle_count],counter.cycle_count)
 
     counter.atom_count = list(dicts.dict_atoms.keys()).__len__()
     counter.port_count = list(dicts.dict_ports.keys()).__len__()
@@ -155,6 +156,9 @@ def generate_cycle(start=0, step=1, max_c=50, jsonAt=50, out_file='',
                 tf._output_tables(dicts.dict_atoms, file_name=out_file)
                 tf._output_tables(dicts.dict_ports, title="Ports", kind='port',
                                   file_name=out_file)
+                #[YA] append output of this generation cycle                  
+                dicts._take_snapshot(counter.cycle_count)
+                viz.add(dicts.mega_atoms_list[counter.cycle_count],counter.cycle_count)
 
         if counter.cycle_count in range_list + [max_c] + [jsonAt]:
             M = [m._move_snapshot() for m in M]
@@ -162,10 +166,13 @@ def generate_cycle(start=0, step=1, max_c=50, jsonAt=50, out_file='',
             dicts.moves_list[counter.cycle_count] = M
             print(counter.cycle_count)
             if counter.cycle_count == jsonAt:
-                data._d3_output(dicts.mega_atoms_list[counter.cycle_count],
-                                html_out_file)
+                viz.add(dicts.mega_atoms_list[counter.cycle_count],counter.cycle_count)
+        
         # end of cycle
 
+    #close generated file    
+    viz.finalize()    
+    
     if settings.verbose:
         # print total move count
         tm = tc.ftext("Total Moves: ", fcol='cy')
@@ -177,14 +184,16 @@ def generate_cycle(start=0, step=1, max_c=50, jsonAt=50, out_file='',
         print(m_count)
 
 
+
 def main():
     # The current version of chemlambda-py doesn't work like the original
     # chemlambda, it can produce a per-cycle output right now, but there's no
     # rewrites as in the original version.
 
     # mol files from mol_files/
-    # mol_file = 'mol_files/lisfact_2_mod.mol'
-    mol_file = 'mol_files/fibo.mol'
+    # mol_file = 'mol_files/2.mol'
+    # mol_file = 'mol_files/betaMove.mol'
+    mol_file = 'mol_files/9_quine.mol'
     # mol_file = 'mol_files/ackackpred.mol'
     html_out_file = mol_file.replace('.mol', '.html')
 
@@ -198,6 +207,7 @@ def main():
     # required.
     generate_cycle(start=50, step=1, max_c=70, jsonAt=56, out_file='',
                    html_out_file=html_out_file)
+    
     return 0
 
 if __name__ == '__main__':
