@@ -9,8 +9,8 @@
 
 # modified to run on VS Code IDE 
 # modifier: Yuvaraj Athur
-# email   : yuvaraj.a.r@gmail.com
-# date    : Tue 24 May 2016 
+# email   : yuvaraj.a.r@gmail.c
+# touch   : Thu 07 Jul 2016
 # ver    :
 
 
@@ -43,22 +43,22 @@ class TextFormat(object):
                             eg: "bold, italics, blink"
     """
     """ Basic color escape sequence """
-    _r = _red = '\033[2;91m'
-    _g = _green = '\033[2;92m'
-    _y = _yellow = '\033[2;93m'
-    _b = _blue = '\033[2;94m'
-    _m = _magenta = '\033[2;95m'
-    _c = _cyan = '\033[2;96m'
+    _r = _red = '\033'#[2;91m'
+    _g = _green = '\033'#[2;92m'
+    _y = _yellow = '\033'#[2;93m'
+    _b = _blue = '\033'#[2;94m'
+    _m = _magenta = '\033'#[2;95m'
+    _c = _cyan = '\033'#[2;96m'
 
     #bold
-    _R = _RED = '\033[1;91m'
-    _G = _GREEN = '\033[1;92m'
-    _Y = _YELLOW = '\033[1;93m'
-    _B = _BLUE = '\033[1;94m'
-    _M = _MAGENTA = '\033[1;95m'
-    _C = _CYAN = '\033[1;96m'
+    _R = _RED = '\033'#[1;91m'
+    _G = _GREEN = '\033'#[1;92m'
+    _Y = _YELLOW = '\033'#[1;93m'
+    _B = _BLUE = '\033'#[1;94m'
+    _M = _MAGENTA = '\033'#[1;95m'
+    _C = _CYAN = '\033'#[1;96m'
 
-    _E = _END = '\033[0m'
+    _E = _END = '\033'#[0m'
 
 
     def __init__ (self):
@@ -112,7 +112,7 @@ class TextFormat(object):
             styles = "bold"
 
         tcolor = style_dict[col]
-        return "\033[{};{}m".format(styles, tcolor)
+        return ""#"\033[{};{}m".format(styles, tcolor)
 
 
     def hr(self, hr_len=30, hr_col="yellow", hr_char = "-", hr_attr = "bold" ):
@@ -146,7 +146,7 @@ class TextFormat(object):
                 remainder -= 1
             else:
                 hrlen = hr_len_per
-            hr_l += "{}{}".format(self.esctext(hc, hr_attr), hr_char*hrlen)
+            hr_l += "".format(self.esctext(hc, hr_attr), hr_char*hrlen)
         hr_l += self._END
         return hr_l
 
@@ -298,7 +298,8 @@ class TextOutput(TextFormat):
         text = ''.join([hr_key[c].format(vl) for c in columns])
         HR = self.hr(hr_len=hl, hr_col='ye', hr_attr='none') + '\n'
 
-        output = "\033[92;1m{:^70}\033[0m\n".format(title)
+        #output = "\033[92;1m{:^70}\033[0m\n".format(title)
+        output = "\n".format(title)
         output += HR
         output += text.format(*columns) + '\n'
         output += HR
